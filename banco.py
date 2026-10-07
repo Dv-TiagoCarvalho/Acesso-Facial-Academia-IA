@@ -175,7 +175,7 @@ class Banco:
     def listar_acessos(self, dia: str) -> list[sqlite3.Row]:
         with self.conectar() as con:
             return con.execute(
-                "SELECT * FROM acessos WHERE momento >= ? AND momento < ? ORDER BY id DESC",
+                "SELECT * FROM acessos WHERE momento >= ? AND momento < ? ORDER BY momento DESC, id DESC",
                 (f"{dia} 00:00:00", f"{dia} 99"),
             ).fetchall()
 

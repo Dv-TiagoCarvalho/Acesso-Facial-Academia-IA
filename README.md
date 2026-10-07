@@ -4,6 +4,30 @@ O aluno olha para a câmera na entrada, vira o rosto para confirmar que é uma p
 e a tela mostra se a entrada está liberada. Roda em Python no computador da academia,
 usa a webcam e é operado pelo navegador.
 
+## Telas
+
+As imagens usam alunos fictícios e uma ilustração no lugar da câmera.
+
+**Totem da entrada**
+
+| Aguardando o aluno | Prova de vida | Entrada liberada |
+|---|---|---|
+| ![Totem pedindo para olhar para a câmera](docs/totem-espera.png) | ![Totem pedindo para virar o rosto](docs/totem-virar-rosto.png) | ![Totem com entrada liberada](docs/totem-liberado.png) |
+
+| Plano vencido | Entrada bloqueada |
+|---|---|
+| ![Totem avisando que o plano venceu](docs/totem-plano-vencido.png) | ![Totem pedindo para passar na recepção](docs/totem-bloqueado.png) |
+
+**Painel da recepção**
+
+| Alunos | Histórico de acessos |
+|---|---|
+| ![Lista de alunos com plano, rosto e última entrada](docs/painel-alunos.png) | ![Histórico de acessos do dia](docs/painel-acessos.png) |
+
+| Gravar o rosto | Editar aluno e renovar plano | Ajustes |
+|---|---|---|
+| ![Janela de gravação do rosto](docs/painel-gravar-rosto.png) | ![Janela de edição do aluno](docs/painel-editar-aluno.png) | ![Tela de ajustes](docs/painel-ajustes.png) |
+
 ## Como iniciar
 
 Você precisa do Python 3.10 ou mais novo (python.org/downloads), do Git e de uma webcam.
