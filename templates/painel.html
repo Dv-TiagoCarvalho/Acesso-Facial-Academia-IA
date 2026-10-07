@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Painel — {{ academia }}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='estilo.css') }}">
+</head>
+<body>
+
+  <!-- Entrada: criar a senha no primeiro uso, ou digitar a senha -->
+  <div class="entrada" id="entrada" hidden>
+    <form id="form-entrada">
+      <h1 class="estreita" id="entrada-titulo">Painel da recepção</h1>
+      <p id="entrada-texto"></p>
+      <label class="campo">
+        <span id="entrada-rotulo">Senha</span>
+        <input type="password" id="entrada-senha" autocomplete="current-password" required>
+      </label>
+      <p class="aviso" id="entrada-erro" hidden></p>
+      <button class="botao" id="entrada-botao">Entrar</button>
+    </form>
+  </div>
+
+  <div class="painel" id="app" hidden>
+    <header class="cabecalho">
+      <h1 class="estreita" id="nome-academia">{{ academia }}</h1>
+      <nav class="abas" role="tablist">
+        <button role="tab" data-aba="alunos" aria-selected="true">Alunos</button>
+        <button role="tab" data-aba="acessos" aria-selected="false">Acessos</button>
+        <button role="tab" data-aba="ajustes" aria-selected="false">Ajustes</button>
+      </nav>
+      <div class="atalhos">
+        <a href="/" target="_blank" rel="noopener">Abrir totem</a>
+        <button class="link" id="sair">Sair</button>
+      </div>
+    </header>
+
+    <!-- Alunos -->
+    <section id="aba-alunos">
+      <div class="barra">
+        <input type="search" id="busca" placeholder="Buscar por nome ou matrícula" aria-label="Buscar aluno">
+        <button class="botao claro empurra" id="importar">Importar planilha</button>
+        <button class="botao" id="novo-aluno">Cadastrar aluno</button>
+      </div>
+      <div class="rolagem">
+        <table id="tabela-alunos">
+          <thead><tr><th>Aluno</th><th>Matrícula</th><th>Plano</th><th>Rosto</th><th>Última entrada</th><th></th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="vazio-geral" id="sem-alunos" hidden>
+        <h2 class="estreita">Nenhum aluno ainda</h2>
+        <p>Cadastre o primeiro aluno e depois grave o rosto dele pela câmera. A partir daí o totem já o reconhece.</p>
+        <button class="botao" id="novo-aluno-2">Cadastrar aluno</button>
+      </div>
+      <p class="resumo" id="sem-resultado" hidden>Nenhum aluno encontrado com essa busca.</p>
+    </section>
+
+    <!-- Acessos -->
+    <section id="aba-acessos" hidden>
+      <div class="barra">
+        <input type="date" id="dia" aria-label="Dia">
+        <span class="resumo" id="resumo-acessos"></span>
+        <a class="botao claro empurra" id="baixar" href="/api/acessos.csv">Baixar planilha</a>
+      </div>
+      <div class="rolagem">
+        <table id="tabela-acessos">
+          <thead><tr><th>Hora</th><th>Aluno</th><th>Matrícula</th><th>Resultado</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <p class="resumo" id="sem-acessos" hidden>Ninguém passou pelo totem neste dia.</p>
+    </section>
+
+    <!-- Ajustes -->
+    <section id="aba-ajustes" class="ajustes" hidden>
+      <section>
+        <h2>Academia e entrada</h2>
+        <form id="form-ajustes">
+          <label class="campo">
+            <span>Nome da academia</span>
+            <input type="text" id="aj-nome" maxlength="60" required>
+            <small>Aparece no topo do totem.</small>
+          </label>
+          <label class="campo">
+            <span>Rigor do reconhecimento: <output id="aj-valor"></output></span>
+            <input type="range" id="aj-limiar" min="0.30" max="0.70" step="0.01">
+            <div class="rigor"><span>Mais tolerante</span><span>Mais exigente</span></div>
+            <small>Mais exigente reduz a chance de confundir duas pessoas, mas o aluno pode precisar de mais tentativas. O valor recomendado é 0,42.</small>
+          </label>
+          <label class="marcar">
+            <input type="checkbox" id="aj-vida">
+            <span>Pedir para o aluno virar o rosto antes de liberar
+              <small class="ajuda">Barra quem mostra uma foto ou a tela do celular para a câmera. A entrada leva uns 2 segundos a mais.</small></span>
+          </label>
+          <label class="campo">
+            <span>Catraca ou trava da porta</span>
+            <input type="text" id="aj-catraca" maxlength="300" placeholder="http://192.168.0.50/abrir" inputmode="url" autocomplete="off">
+            <small>Endereço que o sistema chama a cada entrada liberada, para relés e controladoras de rede. Em branco, a liberação aparece só na tela.</small>
+          </label>
+          <p class="ajuda" id="aj-catraca-ultimo"></p>
+          <button class="botao">Salvar ajustes</button>
+          <button class="botao claro" type="button" id="aj-testar">Testar catraca</button><span class="feito" id="aj-feito" hidden>Ajustes salvos</span>
+          <p class="aviso" id="aj-erro" hidden></p>
+        </form>
+      </section>
+      <section>
+        <h2>Senha do painel</h2>
+        <form id="form-senha">
+          <label class="campo"><span>Senha atual</span><input type="password" id="se-atual" autocomplete="current-password" required></label>
+          <label class="campo"><span>Nova senha</span><input type="password" id="se-nova" autocomplete="new-password" minlength="8" required>
+            <small>Pelo menos 8 caracteres.</small></label>
+          <button class="botao">Trocar senha</button><span class="feito" id="se-feito" hidden>Senha trocada</span>
+          <p class="aviso" id="se-erro" hidden></p>
+        </form>
+      </section>
+    </section>
+  </div>
+
+  <!-- Cadastro / edição do aluno -->
+  <dialog id="dlg-aluno">
+    <form id="form-aluno" method="dialog">
+      <h2 class="estreita" id="al-titulo">Cadastrar aluno</h2>
+      <label class="campo"><span>Nome completo</span><input type="text" id="al-nome" maxlength="120" required></label>
+      <label class="campo"><span>Matrícula</span><input type="text" id="al-matricula" maxlength="40" required></label>
+      <label class="campo"><span>Plano válido até</span><input type="date" id="al-validade">
+        <small>Deixe em branco se o plano não tem vencimento.</small></label>
+      <div class="renovar" role="group" aria-label="Renovar plano">
+        <span>Renovar por</span>
+        <button class="botao claro pequeno" type="button" data-meses="1">1 mês</button>
+        <button class="botao claro pequeno" type="button" data-meses="3">3 meses</button>
+        <button class="botao claro pequeno" type="button" data-meses="12">1 ano</button>
+      </div>
+      <label class="marcar"><input type="checkbox" id="al-bloqueado"><span>Bloquear a entrada deste aluno</span></label>
+      <p class="aviso" id="al-erro" hidden></p>
+      <div class="rodape">
+        <button class="botao" id="al-salvar" value="salvar">Salvar aluno</button>
+        <button class="botao claro" type="button" data-fechar>Cancelar</button>
+        <button class="botao perigo empurra" type="button" id="al-excluir">Excluir aluno</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Importação por planilha -->
+  <dialog id="dlg-importar">
+    <h2 class="estreita">Importar planilha</h2>
+    <p class="campo">Use um arquivo CSV com as colunas <strong>nome</strong>, <strong>matricula</strong> e, se quiser, <strong>validade</strong> (dia/mês/ano). No Excel ou no Google Planilhas: Arquivo, Salvar como, CSV. Alunos com matrícula já cadastrada são atualizados; os outros são criados.</p>
+    <label class="campo"><span>Arquivo</span><input type="file" id="im-arquivo" accept=".csv,text/csv"></label>
+    <p class="aviso" id="im-erro" hidden></p>
+    <div id="im-resultado" hidden>
+      <p class="campo" id="im-resumo"></p>
+      <ul class="problemas" id="im-problemas"></ul>
+    </div>
+    <div class="rodape">
+      <button class="botao" id="im-enviar">Importar alunos</button>
+      <a class="botao claro" href="/api/alunos/modelo.csv">Baixar modelo</a>
+      <button class="botao claro empurra" data-fechar>Fechar</button>
+    </div>
+  </dialog>
+
+  <!-- Cadastro do rosto -->
+  <dialog id="dlg-rosto">
+    <h2 class="estreita" id="ro-titulo">Rosto</h2>
+
+    <div id="ro-existente" hidden>
+      <p class="campo" id="ro-resumo"></p>
+      <div class="rodape">
+        <button class="botao" id="ro-refazer">Gravar de novo</button>
+        <button class="botao perigo" id="ro-apagar">Apagar rosto</button>
+        <button class="botao claro empurra" data-fechar>Fechar</button>
+      </div>
+    </div>
+
+    <div id="ro-captura" hidden>
+      <div class="captura">
+        <div class="espelho"><video id="ro-video" autoplay playsinline muted></video></div>
+        <div>
+          <p class="passo" id="ro-passo">Peça para o aluno ficar de frente para a câmera.</p>
+          <div class="marcas" id="ro-marcas" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+          <p class="ajuda" id="ro-ajuda"></p>
+        </div>
+      </div>
+      <label class="marcar" id="ro-autorizacao">
+        <input type="checkbox" id="ro-autorizou">
+        <span>O aluno autorizou o uso do rosto para entrar na academia. A data desta autorização fica registrada.</span>
+      </label>
+      <p class="aviso" id="ro-erro" hidden></p>
+      <div class="rodape">
+        <button class="botao" id="ro-comecar">Gravar rosto</button>
+        <button class="botao claro" data-fechar id="ro-fechar">Cancelar</button>
+      </div>
+    </div>
+  </dialog>
+
+  <script src="{{ url_for('static', filename='painel.js') }}"></script>
+</body>
+</html>

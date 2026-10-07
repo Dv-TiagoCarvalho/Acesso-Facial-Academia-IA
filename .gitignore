@@ -1,0 +1,9 @@
+# Dados dos alunos, biometria e cópias de segurança: nunca vão para o repositório
+dados/
+# Modelos baixados na primeira execução
+models/
+# Ambiente Python
+.venv/
+__pycache__/
+*.pyc
+.DS_Store

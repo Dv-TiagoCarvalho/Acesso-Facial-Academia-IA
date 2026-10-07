@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Entrada — {{ academia }}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='estilo.css') }}">
+</head>
+<body>
+  <main class="totem" id="totem" data-estado="iniciando">
+    <header class="totem-topo">
+      <span>{{ academia }}</span>
+      <time class="relogio" id="relogio"></time>
+    </header>
+
+    <div class="totem-meio">
+      <div class="espelho">
+        <video id="camera" autoplay playsinline muted></video>
+      </div>
+      <div class="recado" aria-live="assertive">
+        <h1 class="estreita" id="titulo">Ligando a câmera</h1>
+        <p id="apoio">Se o navegador perguntar, permita o uso da câmera.</p>
+      </div>
+    </div>
+
+    <footer class="totem-pe">
+      <span>Só os dados do rosto são guardados, nunca a foto.</span>
+      <a href="/painel">Painel da recepção</a>
+    </footer>
+  </main>
+  <script src="{{ url_for('static', filename='totem.js') }}"></script>
+</body>
+</html>
